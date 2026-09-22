@@ -38,45 +38,66 @@ body {
     max-width: 95%;
     margin: 30px auto;
     padding: 30px;
+
     background: white;
+
     border-radius: 12px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,0.15);
 }
 
 h1 {
     text-align: center;
+
     margin: 0 0 10px 0;
+
     font-size: 34px;
 }
 
 .instructions {
     text-align: center;
+
     color: #555;
+
     font-size: 17px;
+
     margin-bottom: 25px;
 }
 
 .file-area {
     text-align: center;
+
     padding: 25px;
+
     border: 2px dashed #aaa;
+
     border-radius: 10px;
 }
 
 input[type="file"] {
     font-size: 16px;
+
     margin: 15px;
 }
 
 button {
     border: none;
+
     border-radius: 8px;
+
     padding: 14px 28px;
+
     margin: 5px;
+
     font-size: 17px;
+
     font-weight: bold;
+
     cursor: pointer;
+
     background: #2563eb;
+
     color: white;
 }
 
@@ -94,8 +115,11 @@ button.print-button:hover {
 
 #status {
     margin-top: 15px;
+
     text-align: center;
+
     color: #555;
+
     font-size: 16px;
 }
 
@@ -105,38 +129,49 @@ button.print-button:hover {
 ===================================================== */
 
 #preview {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     gap: 30px;
+
     padding-bottom: 50px;
 }
 
 
 /* =====================================================
    LABEL
+
    LETTER LANDSCAPE
+   11 x 8.5 inch
 ===================================================== */
 
 .label {
 
     width: 11in;
+
     height: 8.5in;
 
     background: white;
 
-    /*
-       거의 끝까지 사용
-    */
-
-    padding: 0.12in 0.18in;
+    padding:
+        0.12in
+        0.18in;
 
     display: grid;
 
     /*
-       Item Code
-       Pallet Number
-       Bottom
+        TOP:
+        SAP / ITEM CODE
+
+        MIDDLE:
+        PALLET ID
+
+        BOTTOM:
+        LOT / QTY
     */
 
     grid-template-rows:
@@ -147,31 +182,35 @@ button.print-button:hover {
     overflow: hidden;
 
     page-break-after: always;
+
     break-after: page;
 
-    box-shadow: 0 3px 18px rgba(0,0,0,0.20);
+    box-shadow:
+        0 3px 18px rgba(0,0,0,0.20);
 }
 
 
 /* =====================================================
-   ITEM CODE
+   ITEM CODE / SAP CODE
 
-   REALLY BIG
+   Slightly smaller than previous version
 ===================================================== */
 
 .item-code {
 
     width: 100%;
+
     height: 100%;
 
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     text-align: center;
 
-    font-size: 130px;
+    font-size: 155px;
 
     font-weight: 900;
 
@@ -194,6 +233,7 @@ button.print-button:hover {
 .pallet-area {
 
     width: 100%;
+
     height: 100%;
 
     display: flex;
@@ -209,9 +249,9 @@ button.print-button:hover {
 
 
 /* =====================================================
-   PALLET NUMBER
+   PALLET ID
 
-   BIGGEST
+   BIGGEST TEXT
 ===================================================== */
 
 .pallet-number {
@@ -239,6 +279,7 @@ button.print-button:hover {
 .bottom-info {
 
     width: 100%;
+
     height: 100%;
 
     display: flex;
@@ -255,11 +296,19 @@ button.print-button:hover {
 }
 
 
+/* =====================================================
+   LOT NUMBER
+===================================================== */
+
 .lot-number {
 
     white-space: nowrap;
 }
 
+
+/* =====================================================
+   QUANTITY
+===================================================== */
 
 .qty {
 
@@ -278,41 +327,58 @@ button.print-button:hover {
 @media print {
 
     body {
+
         background: white;
+
         margin: 0;
+
         padding: 0;
     }
 
+
     .controls {
+
         display: none !important;
     }
 
+
     #preview {
+
         display: block;
+
         margin: 0;
+
         padding: 0;
     }
+
 
     .label {
 
         width: 11in;
+
         height: 8.5in;
 
         margin: 0;
 
-        padding: 0.12in 0.18in;
+        padding:
+            0.12in
+            0.18in;
 
         box-shadow: none;
 
         page-break-after: always;
+
         break-after: page;
     }
+
 
     .label:last-child {
 
         page-break-after: auto;
+
         break-after: auto;
     }
+
 }
 
 
@@ -321,7 +387,9 @@ button.print-button:hover {
 ===================================================== */
 
 @page {
+
     size: Letter landscape;
+
     margin: 0;
 }
 
@@ -343,9 +411,11 @@ button.print-button:hover {
         Pallet ID Generator
     </h1>
 
+
     <div class="instructions">
         Upload your Packing List Excel file
     </div>
+
 
     <div class="file-area">
 
@@ -355,11 +425,16 @@ button.print-button:hover {
             accept=".xlsx,.xls"
         >
 
+
         <br>
 
-        <button onclick="generateLabels()">
+
+        <button
+            onclick="generateLabels()"
+        >
             Generate Labels
         </button>
+
 
         <button
             class="print-button"
@@ -367,6 +442,7 @@ button.print-button:hover {
         >
             Print / Save PDF
         </button>
+
 
         <div id="status"></div>
 
@@ -402,20 +478,24 @@ function normalizeHeader(value) {
 
 /* =====================================================
    FIND COLUMN
-
-   SAP / SAP CODE
-   PALLET ID
-   QTY / QUANTITY
 ===================================================== */
 
-function findColumn(headers, possibleNames) {
+function findColumn(
+    headers,
+    possibleNames
+) {
 
-    for (const header of headers) {
+    for (
+        const header of headers
+    ) {
 
         const normalizedHeader =
             normalizeHeader(header);
 
-        for (const name of possibleNames) {
+
+        for (
+            const name of possibleNames
+        ) {
 
             if (
                 normalizedHeader ===
@@ -436,20 +516,28 @@ function findColumn(headers, possibleNames) {
 
 /* =====================================================
    AUTO-SIZE ITEM CODE
-
-   Uses the available width so the SAP code
-   becomes as large as possible.
 ===================================================== */
 
 function fitItemCode(element) {
 
+    const container =
+        element.parentElement;
+
+
     const maxWidth =
-        element.parentElement.clientWidth;
+        container.clientWidth;
+
 
     const maxHeight =
-        element.parentElement.clientHeight;
+        container.clientHeight;
 
-    let fontSize = 180;
+
+    /*
+       Start slightly smaller than
+       the previous version.
+    */
+
+    let fontSize = 165;
 
 
     element.style.fontSize =
@@ -457,30 +545,38 @@ function fitItemCode(element) {
 
 
     /*
-       Reduce until it fits horizontally
+       Keep reducing only if necessary.
     */
 
     while (
+
         (
-            element.scrollWidth > maxWidth ||
-            element.scrollHeight > maxHeight
-        ) &&
+            element.scrollWidth >
+            maxWidth ||
+
+            element.scrollHeight >
+            maxHeight
+        )
+
+        &&
+
         fontSize > 35
+
     ) {
 
         fontSize -= 2;
 
+
         element.style.fontSize =
             fontSize + "px";
+
     }
 
 }
 
 
 /* =====================================================
-   AUTO-SIZE PALLET NUMBER
-
-   Pallet ID remains the biggest text.
+   AUTO-SIZE PALLET ID
 ===================================================== */
 
 function fitPalletNumber(element) {
@@ -488,11 +584,18 @@ function fitPalletNumber(element) {
     const container =
         element.parentElement;
 
+
     const maxWidth =
         container.clientWidth;
 
+
     const maxHeight =
         container.clientHeight;
+
+
+    /*
+       Pallet ID starts HUGE.
+    */
 
     let fontSize = 390;
 
@@ -501,18 +604,32 @@ function fitPalletNumber(element) {
         fontSize + "px";
 
 
+    /*
+       Reduce only when needed.
+    */
+
     while (
+
         (
-            element.scrollWidth > maxWidth ||
-            element.scrollHeight > maxHeight
-        ) &&
+            element.scrollWidth >
+            maxWidth ||
+
+            element.scrollHeight >
+            maxHeight
+        )
+
+        &&
+
         fontSize > 80
+
     ) {
 
         fontSize -= 2;
 
+
         element.style.fontSize =
             fontSize + "px";
+
     }
 
 }
@@ -525,16 +642,30 @@ function fitPalletNumber(element) {
 async function generateLabels() {
 
     const fileInput =
-        document.getElementById("excelFile");
+        document.getElementById(
+            "excelFile"
+        );
+
 
     const status =
-        document.getElementById("status");
+        document.getElementById(
+            "status"
+        );
+
 
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
 
 
-    if (!fileInput.files.length) {
+    /* =================================================
+       CHECK FILE
+    ================================================= */
+
+    if (
+        !fileInput.files.length
+    ) {
 
         alert(
             "Please select your Packing List Excel file."
@@ -571,6 +702,7 @@ async function generateLabels() {
                 arrayBuffer,
                 {
                     type: "array",
+
                     cellStyles: true
                 }
             );
@@ -585,7 +717,9 @@ async function generateLabels() {
 
 
         const worksheet =
-            workbook.Sheets[sheetName];
+            workbook.Sheets[
+                sheetName
+            ];
 
 
         if (!worksheet) {
@@ -606,6 +740,7 @@ async function generateLabels() {
                 worksheet,
                 {
                     header: 1,
+
                     defval: ""
                 }
             );
@@ -632,7 +767,13 @@ async function generateLabels() {
 
         for (
             let i = 0;
-            i < Math.min(rawData.length, 20);
+
+            i <
+            Math.min(
+                rawData.length,
+                20
+            );
+
             i++
         ) {
 
@@ -641,6 +782,10 @@ async function generateLabels() {
                     normalizeHeader
                 );
 
+
+            /* =========================================
+               SAP
+            ========================================= */
 
             const hasSAP =
                 row.some(x =>
@@ -654,6 +799,10 @@ async function generateLabels() {
                 );
 
 
+            /* =========================================
+               PALLET ID
+            ========================================= */
+
             const hasPallet =
                 row.some(x =>
                     [
@@ -666,6 +815,10 @@ async function generateLabels() {
                     ].includes(x)
                 );
 
+
+            /* =========================================
+               QUANTITY
+            ========================================= */
 
             const hasQty =
                 row.some(x =>
@@ -683,15 +836,23 @@ async function generateLabels() {
                 hasQty
             ) {
 
-                headerRowIndex = i;
+                headerRowIndex =
+                    i;
 
                 break;
+
             }
 
         }
 
 
-        if (headerRowIndex === -1) {
+        /* =============================================
+           HEADER NOT FOUND
+        ============================================= */
+
+        if (
+            headerRowIndex === -1
+        ) {
 
             throw new Error(
                 "Could not find SAP / SAP Code, Pallet ID and Qty columns."
@@ -705,7 +866,9 @@ async function generateLabels() {
         ============================================= */
 
         const headers =
-            rawData[headerRowIndex];
+            rawData[
+                headerRowIndex
+            ];
 
 
         /* =============================================
@@ -718,12 +881,18 @@ async function generateLabels() {
             );
 
 
+        /* =============================================
+           CREATE OBJECTS
+        ============================================= */
+
         const rows =
             dataRows
 
                 .filter(row =>
                     row.some(cell =>
-                        String(cell).trim() !== ""
+                        String(
+                            cell
+                        ).trim() !== ""
                     )
                 )
 
@@ -731,14 +900,20 @@ async function generateLabels() {
 
                     const obj = {};
 
+
                     headers.forEach(
-                        (header, index) => {
+                        (
+                            header,
+                            index
+                        ) => {
 
                             obj[header] =
-                                row[index] ?? "";
+                                row[index] ??
+                                "";
 
                         }
                     );
+
 
                     return obj;
 
@@ -752,6 +927,7 @@ async function generateLabels() {
         const sapColumn =
             findColumn(
                 headers,
+
                 [
                     "SAP",
                     "SAP Code",
@@ -765,6 +941,7 @@ async function generateLabels() {
         const palletColumn =
             findColumn(
                 headers,
+
                 [
                     "Pallet ID",
                     "PalletID",
@@ -779,6 +956,7 @@ async function generateLabels() {
         const qtyColumn =
             findColumn(
                 headers,
+
                 [
                     "Qty",
                     "Quantity",
@@ -786,6 +964,10 @@ async function generateLabels() {
                 ]
             );
 
+
+        /* =============================================
+           VALIDATE COLUMNS
+        ============================================= */
 
         if (!sapColumn) {
 
@@ -824,26 +1006,33 @@ async function generateLabels() {
         rows.forEach(row => {
 
 
+            /* =========================================
+               GET VALUES
+            ========================================= */
+
             const sapCode =
                 String(
-                    row[sapColumn] ?? ""
+                    row[sapColumn] ??
+                    ""
                 ).trim();
 
 
             const palletID =
                 String(
-                    row[palletColumn] ?? ""
+                    row[palletColumn] ??
+                    ""
                 ).trim();
 
 
             const qty =
                 String(
-                    row[qtyColumn] ?? ""
+                    row[qtyColumn] ??
+                    ""
                 ).trim();
 
 
             /* =========================================
-               SKIP COMPLETELY EMPTY ROW
+               SKIP EMPTY ROW
             ========================================= */
 
             if (
@@ -862,21 +1051,28 @@ async function generateLabels() {
             ========================================= */
 
             const label =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             label.className =
                 "label";
 
 
             /* =========================================
-               SAP / ITEM CODE
+               ITEM CODE
             ========================================= */
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "item-code";
+
 
             item.textContent =
                 sapCode;
@@ -884,23 +1080,32 @@ async function generateLabels() {
 
             /* =========================================
                PALLET ID
+               
+               ADD #
             ========================================= */
 
             const palletArea =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             palletArea.className =
                 "pallet-area";
 
 
             const pallet =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             pallet.className =
                 "pallet-number";
 
+
             pallet.textContent =
-                palletID;
+                "#" + palletID;
 
 
             palletArea.appendChild(
@@ -913,31 +1118,46 @@ async function generateLabels() {
             ========================================= */
 
             const bottom =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             bottom.className =
                 "bottom-info";
 
 
-            /* LOT NUMBER */
+            /* =========================================
+               LOT NUMBER
+            ========================================= */
 
             const lot =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             lot.className =
                 "lot-number";
+
 
             lot.textContent =
                 "Lot Number:";
 
 
-            /* QTY */
+            /* =========================================
+               QTY
+            ========================================= */
 
             const quantity =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             quantity.className =
                 "qty";
+
 
             quantity.textContent =
                 "Qty: " + qty;
@@ -951,6 +1171,7 @@ async function generateLabels() {
                 lot
             );
 
+
             bottom.appendChild(
                 quantity
             );
@@ -960,9 +1181,11 @@ async function generateLabels() {
                 item
             );
 
+
             label.appendChild(
                 palletArea
             );
+
 
             label.appendChild(
                 bottom
@@ -980,10 +1203,12 @@ async function generateLabels() {
 
 
         /* =============================================
-           CHECK
+           CHECK RESULT
         ============================================= */
 
-        if (generated === 0) {
+        if (
+            generated === 0
+        ) {
 
             throw new Error(
                 "No pallet data was found."
@@ -993,35 +1218,56 @@ async function generateLabels() {
 
 
         /* =============================================
-           WAIT FOR RENDER
+           WAIT FOR BROWSER RENDER
         ============================================= */
 
         requestAnimationFrame(() => {
 
-            document
-                .querySelectorAll(".item-code")
-                .forEach(element => {
-
-                    fitItemCode(element);
-
-                });
-
 
             document
-                .querySelectorAll(".pallet-number")
-                .forEach(element => {
+                .querySelectorAll(
+                    ".item-code"
+                )
+                .forEach(
+                    element => {
 
-                    fitPalletNumber(element);
+                        fitItemCode(
+                            element
+                        );
 
-                });
+                    }
+                );
+
+
+            document
+                .querySelectorAll(
+                    ".pallet-number"
+                )
+                .forEach(
+                    element => {
+
+                        fitPalletNumber(
+                            element
+                        );
+
+                    }
+                );
 
         });
 
+
+        /* =============================================
+           STATUS
+        ============================================= */
 
         status.textContent =
             generated +
             " pallet label(s) generated successfully.";
 
+
+        /* =============================================
+           SCROLL
+        ============================================= */
 
         preview.scrollIntoView({
             behavior: "smooth"
@@ -1033,9 +1279,14 @@ async function generateLabels() {
 
     catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
-        status.textContent = "";
+
+        status.textContent =
+            "";
+
 
         alert(
             "Error:\n\n" +
@@ -1054,7 +1305,9 @@ async function generateLabels() {
 function printLabels() {
 
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
 
 
     if (
@@ -1066,6 +1319,7 @@ function printLabels() {
         );
 
         return;
+
     }
 
 
