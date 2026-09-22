@@ -115,9 +115,7 @@ button.print-button:hover {
 
 /* =====================================================
    LABEL
-
    LETTER LANDSCAPE
-   11 x 8.5 inch
 ===================================================== */
 
 .label {
@@ -127,22 +125,24 @@ button.print-button:hover {
 
     background: white;
 
-    padding: 0.18in 0.30in;
+    /*
+       거의 끝까지 사용
+    */
+
+    padding: 0.12in 0.18in;
 
     display: grid;
 
     /*
-       Three sections:
-
-       1. Item Code
-       2. Pallet Number
-       3. Lot / Qty
+       Item Code
+       Pallet Number
+       Bottom
     */
 
     grid-template-rows:
-        1.35in
+        1.55in
         1fr
-        0.65in;
+        0.70in;
 
     overflow: hidden;
 
@@ -156,13 +156,45 @@ button.print-button:hover {
 /* =====================================================
    ITEM CODE
 
-   VERY LARGE
-   Almost full width
+   REALLY BIG
 ===================================================== */
 
 .item-code {
 
     width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    font-size: 155px;
+
+    font-weight: 900;
+
+    line-height: 0.82;
+
+    letter-spacing: -4px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    padding: 0;
+}
+
+
+/* =====================================================
+   PALLET AREA
+===================================================== */
+
+.pallet-area {
+
+    width: 100%;
+    height: 100%;
 
     display: flex;
 
@@ -172,18 +204,7 @@ button.print-button:hover {
 
     text-align: center;
 
-    font-size: 125px;
-
-    font-weight: 900;
-
-    line-height: 0.85;
-
-    letter-spacing: -2px;
-
-    white-space: nowrap;
-
     overflow: hidden;
-
 }
 
 
@@ -193,48 +214,32 @@ button.print-button:hover {
    BIGGEST
 ===================================================== */
 
-.pallet-area {
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-    overflow: hidden;
-}
-
-
 .pallet-number {
 
-    font-size: 330px;
+    font-size: 360px;
 
     font-weight: 900;
 
-    line-height: 0.72;
+    line-height: 0.70;
 
-    letter-spacing: -3px;
+    letter-spacing: -5px;
 
     max-width: 100%;
 
     white-space: nowrap;
 
+    overflow: hidden;
 }
 
 
 /* =====================================================
    BOTTOM
-
-   LOT + QTY
 ===================================================== */
 
 .bottom-info {
 
     width: 100%;
+    height: 100%;
 
     display: flex;
 
@@ -242,12 +247,11 @@ button.print-button:hover {
 
     align-items: center;
 
-    font-size: 58px;
+    font-size: 68px;
 
     font-weight: 800;
 
     line-height: 1;
-
 }
 
 
@@ -261,7 +265,7 @@ button.print-button:hover {
 
     white-space: nowrap;
 
-    font-size: 64px;
+    font-size: 72px;
 
     font-weight: 900;
 }
@@ -292,21 +296,20 @@ button.print-button:hover {
     .label {
 
         width: 11in;
-
         height: 8.5in;
 
         margin: 0;
 
-        padding: 0.18in 0.30in;
+        padding: 0.12in 0.18in;
 
         box-shadow: none;
 
         page-break-after: always;
-
         break-after: page;
     }
 
     .label:last-child {
+
         page-break-after: auto;
         break-after: auto;
     }
@@ -314,13 +317,11 @@ button.print-button:hover {
 
 
 /* =====================================================
-   PAGE SIZE
+   LETTER LANDSCAPE
 ===================================================== */
 
 @page {
-
     size: Letter landscape;
-
     margin: 0;
 }
 
@@ -333,12 +334,14 @@ button.print-button:hover {
 
 
 <!-- =====================================================
-     CONTROLS
+     CONTROL PANEL
 ===================================================== -->
 
 <div class="controls">
 
-    <h1>Pallet ID Generator</h1>
+    <h1>
+        Pallet ID Generator
+    </h1>
 
     <div class="instructions">
         Upload your Packing List Excel file
@@ -381,6 +384,7 @@ button.print-button:hover {
 
 <script>
 
+
 /* =====================================================
    NORMALIZE HEADER
 ===================================================== */
@@ -398,6 +402,10 @@ function normalizeHeader(value) {
 
 /* =====================================================
    FIND COLUMN
+
+   SAP / SAP CODE
+   PALLET ID
+   QTY / QUANTITY
 ===================================================== */
 
 function findColumn(headers, possibleNames) {
@@ -413,7 +421,9 @@ function findColumn(headers, possibleNames) {
                 normalizedHeader ===
                 normalizeHeader(name)
             ) {
+
                 return header;
+
             }
 
         }
@@ -425,86 +435,84 @@ function findColumn(headers, possibleNames) {
 
 
 /* =====================================================
-   PALLET NUMBER SIZE
+   AUTO-SIZE ITEM CODE
+
+   Uses the available width so the SAP code
+   becomes as large as possible.
 ===================================================== */
 
-function adjustPalletFontSize(element, value) {
+function fitItemCode(element) {
 
-    const length =
-        String(value).length;
+    const maxWidth =
+        element.parentElement.clientWidth;
 
-    if (length <= 3) {
-        element.style.fontSize = "330px";
-    }
+    const maxHeight =
+        element.parentElement.clientHeight;
 
-    else if (length === 4) {
-        element.style.fontSize = "300px";
-    }
+    let fontSize = 180;
 
-    else if (length === 5) {
-        element.style.fontSize = "275px";
-    }
 
-    else if (length === 6) {
-        element.style.fontSize = "250px";
-    }
+    element.style.fontSize =
+        fontSize + "px";
 
-    else if (length === 7) {
-        element.style.fontSize = "225px";
-    }
 
-    else if (length === 8) {
-        element.style.fontSize = "200px";
-    }
+    /*
+       Reduce until it fits horizontally
+    */
 
-    else if (length === 9) {
-        element.style.fontSize = "175px";
-    }
+    while (
+        (
+            element.scrollWidth > maxWidth ||
+            element.scrollHeight > maxHeight
+        ) &&
+        fontSize > 35
+    ) {
 
-    else {
-        element.style.fontSize = "150px";
+        fontSize -= 2;
+
+        element.style.fontSize =
+            fontSize + "px";
     }
 
 }
 
 
 /* =====================================================
-   ITEM CODE SIZE
+   AUTO-SIZE PALLET NUMBER
+
+   Pallet ID remains the biggest text.
 ===================================================== */
 
-function adjustItemFontSize(element, value) {
+function fitPalletNumber(element) {
 
-    const length =
-        String(value).length;
+    const container =
+        element.parentElement;
 
-    /*
-       Keep Item Code BIG,
-       but prevent long codes from
-       running outside the page.
-    */
+    const maxWidth =
+        container.clientWidth;
 
-    if (length <= 6) {
-        element.style.fontSize = "125px";
-    }
+    const maxHeight =
+        container.clientHeight;
 
-    else if (length <= 8) {
-        element.style.fontSize = "110px";
-    }
+    let fontSize = 390;
 
-    else if (length <= 10) {
-        element.style.fontSize = "95px";
-    }
 
-    else if (length <= 12) {
-        element.style.fontSize = "82px";
-    }
+    element.style.fontSize =
+        fontSize + "px";
 
-    else if (length <= 15) {
-        element.style.fontSize = "70px";
-    }
 
-    else {
-        element.style.fontSize = "58px";
+    while (
+        (
+            element.scrollWidth > maxWidth ||
+            element.scrollHeight > maxHeight
+        ) &&
+        fontSize > 80
+    ) {
+
+        fontSize -= 2;
+
+        element.style.fontSize =
+            fontSize + "px";
     }
 
 }
@@ -543,10 +551,12 @@ async function generateLabels() {
     status.textContent =
         "Reading Excel file...";
 
+
     preview.innerHTML = "";
 
 
     try {
+
 
         /* =============================================
            READ EXCEL
@@ -554,6 +564,7 @@ async function generateLabels() {
 
         const arrayBuffer =
             await file.arrayBuffer();
+
 
         const workbook =
             XLSX.read(
@@ -572,6 +583,7 @@ async function generateLabels() {
         const sheetName =
             workbook.SheetNames[0];
 
+
         const worksheet =
             workbook.Sheets[sheetName];
 
@@ -581,11 +593,12 @@ async function generateLabels() {
             throw new Error(
                 "No worksheet found."
             );
+
         }
 
 
         /* =============================================
-           SHEET DATA
+           READ DATA
         ============================================= */
 
         const rawData =
@@ -606,6 +619,7 @@ async function generateLabels() {
             throw new Error(
                 "The Excel sheet is empty."
             );
+
         }
 
 
@@ -628,14 +642,14 @@ async function generateLabels() {
                 );
 
 
-            const hasItem =
+            const hasSAP =
                 row.some(x =>
                     [
-                        "item code",
-                        "itemcode",
-                        "item",
-                        "sku",
-                        "product code"
+                        "sap",
+                        "sap code",
+                        "sapcode",
+                        "sap item",
+                        "sap item code"
                     ].includes(x)
                 );
 
@@ -643,13 +657,12 @@ async function generateLabels() {
             const hasPallet =
                 row.some(x =>
                     [
-                        "pallet number",
-                        "palletnumber",
+                        "pallet id",
+                        "palletid",
                         "pallet",
+                        "pallet number",
                         "pallet no",
-                        "pallet no.",
-                        "pallet #",
-                        "pallet id"
+                        "pallet no."
                     ].includes(x)
                 );
 
@@ -665,7 +678,7 @@ async function generateLabels() {
 
 
             if (
-                hasItem &&
+                hasSAP &&
                 hasPallet &&
                 hasQty
             ) {
@@ -681,8 +694,9 @@ async function generateLabels() {
         if (headerRowIndex === -1) {
 
             throw new Error(
-                "Could not find Item Code, Pallet Number and Qty columns."
+                "Could not find SAP / SAP Code, Pallet ID and Qty columns."
             );
+
         }
 
 
@@ -695,7 +709,7 @@ async function generateLabels() {
 
 
         /* =============================================
-           DATA
+           DATA ROWS
         ============================================= */
 
         const dataRows =
@@ -706,11 +720,13 @@ async function generateLabels() {
 
         const rows =
             dataRows
+
                 .filter(row =>
                     row.some(cell =>
                         String(cell).trim() !== ""
                     )
                 )
+
                 .map(row => {
 
                     const obj = {};
@@ -725,22 +741,23 @@ async function generateLabels() {
                     );
 
                     return obj;
+
                 });
 
 
         /* =============================================
-           FIND REQUIRED COLUMNS
+           FIND COLUMNS
         ============================================= */
 
-        const itemColumn =
+        const sapColumn =
             findColumn(
                 headers,
                 [
-                    "Item Code",
-                    "ItemCode",
-                    "Item",
-                    "SKU",
-                    "Product Code"
+                    "SAP",
+                    "SAP Code",
+                    "SAPCode",
+                    "SAP Item",
+                    "SAP Item Code"
                 ]
             );
 
@@ -749,13 +766,12 @@ async function generateLabels() {
             findColumn(
                 headers,
                 [
-                    "Pallet Number",
-                    "PalletNumber",
+                    "Pallet ID",
+                    "PalletID",
                     "Pallet",
+                    "Pallet Number",
                     "Pallet No",
-                    "Pallet No.",
-                    "Pallet #",
-                    "Pallet ID"
+                    "Pallet No."
                 ]
             );
 
@@ -771,19 +787,21 @@ async function generateLabels() {
             );
 
 
-        if (!itemColumn) {
+        if (!sapColumn) {
 
             throw new Error(
-                "Item Code column not found."
+                "SAP / SAP Code column not found."
             );
+
         }
 
 
         if (!palletColumn) {
 
             throw new Error(
-                "Pallet Number column not found."
+                "Pallet ID column not found."
             );
+
         }
 
 
@@ -792,6 +810,7 @@ async function generateLabels() {
             throw new Error(
                 "Qty / Quantity column not found."
             );
+
         }
 
 
@@ -804,13 +823,14 @@ async function generateLabels() {
 
         rows.forEach(row => {
 
-            const itemCode =
+
+            const sapCode =
                 String(
-                    row[itemColumn] ?? ""
+                    row[sapColumn] ?? ""
                 ).trim();
 
 
-            const palletNumber =
+            const palletID =
                 String(
                     row[palletColumn] ?? ""
                 ).trim();
@@ -822,12 +842,18 @@ async function generateLabels() {
                 ).trim();
 
 
+            /* =========================================
+               SKIP COMPLETELY EMPTY ROW
+            ========================================= */
+
             if (
-                !itemCode &&
-                !palletNumber &&
+                !sapCode &&
+                !palletID &&
                 !qty
             ) {
+
                 return;
+
             }
 
 
@@ -843,7 +869,7 @@ async function generateLabels() {
 
 
             /* =========================================
-               ITEM CODE
+               SAP / ITEM CODE
             ========================================= */
 
             const item =
@@ -853,16 +879,11 @@ async function generateLabels() {
                 "item-code";
 
             item.textContent =
-                itemCode;
-
-            adjustItemFontSize(
-                item,
-                itemCode
-            );
+                sapCode;
 
 
             /* =========================================
-               PALLET NUMBER
+               PALLET ID
             ========================================= */
 
             const palletArea =
@@ -879,13 +900,7 @@ async function generateLabels() {
                 "pallet-number";
 
             pallet.textContent =
-                palletNumber;
-
-
-            adjustPalletFontSize(
-                pallet,
-                palletNumber
-            );
+                palletID;
 
 
             palletArea.appendChild(
@@ -904,7 +919,7 @@ async function generateLabels() {
                 "bottom-info";
 
 
-            /* LOT */
+            /* LOT NUMBER */
 
             const lot =
                 document.createElement("div");
@@ -932,17 +947,31 @@ async function generateLabels() {
                ASSEMBLE
             ========================================= */
 
-            bottom.appendChild(lot);
+            bottom.appendChild(
+                lot
+            );
 
-            bottom.appendChild(quantity);
+            bottom.appendChild(
+                quantity
+            );
 
-            label.appendChild(item);
 
-            label.appendChild(palletArea);
+            label.appendChild(
+                item
+            );
 
-            label.appendChild(bottom);
+            label.appendChild(
+                palletArea
+            );
 
-            preview.appendChild(label);
+            label.appendChild(
+                bottom
+            );
+
+
+            preview.appendChild(
+                label
+            );
 
 
             generated++;
@@ -951,7 +980,7 @@ async function generateLabels() {
 
 
         /* =============================================
-           RESULT
+           CHECK
         ============================================= */
 
         if (generated === 0) {
@@ -959,7 +988,34 @@ async function generateLabels() {
             throw new Error(
                 "No pallet data was found."
             );
+
         }
+
+
+        /* =============================================
+           WAIT FOR RENDER
+        ============================================= */
+
+        requestAnimationFrame(() => {
+
+            document
+                .querySelectorAll(".item-code")
+                .forEach(element => {
+
+                    fitItemCode(element);
+
+                });
+
+
+            document
+                .querySelectorAll(".pallet-number")
+                .forEach(element => {
+
+                    fitPalletNumber(element);
+
+                });
+
+        });
 
 
         status.textContent =
@@ -973,6 +1029,7 @@ async function generateLabels() {
 
 
     }
+
 
     catch (error) {
 
