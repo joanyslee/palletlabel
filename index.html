@@ -1,277 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Pallet ID Generator</title>
 
-<!-- SheetJS: Excel (.xlsx) reader -->
+
+<!-- =====================================================
+     SHEETJS
+     Used to read Excel files
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+
 <style>
+
+/* =====================================================
+   GENERAL
+===================================================== */
 
 * {
     box-sizing: border-box;
 }
 
+
 body {
+
     margin: 0;
+
     background: #eeeeee;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #111;
+
+    color: #111111;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
-/* =========================
+
+/* =====================================================
    CONTROL PANEL
-========================= */
+===================================================== */
 
 .controls {
+
     width: 900px;
+
     max-width: 95%;
+
     margin: 30px auto;
-    padding: 25px;
+
+    padding: 30px;
+
     background: white;
+
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.12);
+
+    box-shadow:
+        0 3px 15px rgba(0,0,0,0.15);
 }
+
 
 h1 {
-    margin-top: 0;
+
     text-align: center;
+
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+    font-size: 34px;
 }
 
+
 .instructions {
+
     text-align: center;
-    color: #555;
+
+    color: #555555;
+
+    font-size: 17px;
+
     margin-bottom: 25px;
 }
 
+
 .file-area {
+
     text-align: center;
-    padding: 20px;
-    border: 2px dashed #aaa;
+
+    padding: 25px;
+
+    border: 2px dashed #aaaaaa;
+
     border-radius: 10px;
 }
 
+
 input[type="file"] {
+
+    font-size: 16px;
+
     margin: 15px;
 }
 
+
 button {
+
     border: none;
-    border-radius: 7px;
-    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    padding: 14px 28px;
+
     margin: 5px;
-    font-size: 16px;
+
+    font-size: 17px;
+
     font-weight: bold;
+
     cursor: pointer;
+
     background: #2563eb;
+
     color: white;
 }
 
+
 button:hover {
+
     background: #1d4ed8;
 }
 
+
 button.print-button {
+
     background: #111827;
 }
 
+
 button.print-button:hover {
-    background: #000;
+
+    background: #000000;
 }
+
 
 #status {
+
     margin-top: 15px;
+
     text-align: center;
-    color: #555;
+
+    color: #555555;
+
+    font-size: 16px;
 }
 
-/* =========================
-   LABEL AREA
-========================= */
+
+/* =====================================================
+   PREVIEW AREA
+===================================================== */
 
 #preview {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
-    gap: 25px;
+
+    gap: 30px;
+
     padding-bottom: 50px;
 }
 
-/*
-    Letter Landscape
 
-    11in x 8.5in
-*/
+/* =====================================================
+   LETTER LANDSCAPE
+
+   11 x 8.5 inch
+===================================================== */
 
 .label {
+
     width: 11in;
+
     height: 8.5in;
 
     background: white;
 
-    padding: 0.45in 0.55in;
+    padding:
+        0.30in
+        0.45in;
 
     display: flex;
+
     flex-direction: column;
 
     position: relative;
 
     page-break-after: always;
 
-    box-shadow: 0 2px 15px rgba(0,0,0,.2);
+    break-after: page;
+
+    box-shadow:
+        0 3px 18px rgba(0,0,0,0.20);
 }
 
-/* =========================
+
+/* =====================================================
    ITEM CODE
-========================= */
+
+   LARGE
+===================================================== */
 
 .item-code {
-    text-align: center;
 
-    font-size: 48px;
-    font-weight: bold;
-
-    margin-top: 0.15in;
-
-    word-break: break-word;
-}
-
-/* =========================
-   PALLET NUMBER
-========================= */
-
-.pallet-area {
-    flex: 1;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
 
     text-align: center;
-}
 
-.pallet-number {
-    font-size: 150px;
+    font-size: 85px;
+
     font-weight: 900;
 
     line-height: 1;
 
-    word-break: break-word;
+    margin-top: 0.02in;
 
-    max-width: 100%;
+    word-break: break-word;
 }
 
-/* =========================
-   BOTTOM INFO
-========================= */
+
+/* =====================================================
+   PALLET NUMBER AREA
+===================================================== */
+
+.pallet-area {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    padding:
+        0.05in
+        0;
+}
+
+
+/* =====================================================
+   PALLET NUMBER
+
+   THE BIGGEST TEXT
+===================================================== */
+
+.pallet-number {
+
+    font-size: 280px;
+
+    font-weight: 900;
+
+    line-height: 0.82;
+
+    letter-spacing: 2px;
+
+    max-width: 100%;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   BOTTOM INFORMATION
+===================================================== */
 
 .bottom-info {
+
     width: 100%;
 
     display: flex;
+
     justify-content: space-between;
+
     align-items: flex-end;
 
-    font-size: 32px;
+    font-size: 52px;
 
-    margin-bottom: 0.15in;
+    font-weight: 700;
+
+    margin-bottom: 0.02in;
 }
+
+
+/* =====================================================
+   LOT NUMBER
+===================================================== */
 
 .lot-number {
+
     display: flex;
+
     align-items: flex-end;
+
+    white-space: nowrap;
 }
+
 
 .lot-line {
+
     display: inline-block;
 
-    width: 3.5in;
+    width: 4in;
 
-    border-bottom: 2px solid #111;
+    height: 55px;
 
-    margin-left: 10px;
+    margin-left: 12px;
 
-    height: 35px;
+    border-bottom:
+        4px solid #111111;
 }
+
+
+/* =====================================================
+   QTY
+===================================================== */
 
 .qty {
-    font-weight: bold;
+
+    font-size: 56px;
+
+    font-weight: 900;
+
+    white-space: nowrap;
 }
 
 
-/* =========================
-   PRINT
-========================= */
+/* =====================================================
+   PRINT SETTINGS
+===================================================== */
 
 @media print {
 
     body {
+
         background: white;
+
         margin: 0;
+
+        padding: 0;
     }
 
+
     .controls {
+
         display: none !important;
     }
 
+
     #preview {
+
         display: block;
-        padding: 0;
+
         margin: 0;
+
+        padding: 0;
     }
 
+
     .label {
+
         width: 11in;
+
         height: 8.5in;
 
         margin: 0;
-        padding: 0.45in 0.55in;
+
+        padding:
+            0.30in
+            0.45in;
 
         box-shadow: none;
 
         page-break-after: always;
+
         break-after: page;
     }
 
+
     .label:last-child {
+
         page-break-after: auto;
+
         break-after: auto;
     }
 }
 
 
-/*
-    Tell browser to use Letter Landscape.
-*/
+/* =====================================================
+   LETTER LANDSCAPE
+===================================================== */
 
 @page {
+
     size: Letter landscape;
+
     margin: 0;
 }
 
 </style>
+
 </head>
 
 
 <body>
 
 
-<!-- =========================
-     CONTROLS
-========================= -->
+<!-- =====================================================
+     CONTROL PANEL
+===================================================== -->
 
 <div class="controls">
 
-    <h1>Pallet ID Generator</h1>
+
+    <h1>
+        Pallet ID Generator
+    </h1>
+
 
     <div class="instructions">
-        Upload your Packing List Excel file.
+
+        Upload your Packing List Excel file
+
     </div>
 
+
     <div class="file-area">
+
 
         <input
             type="file"
@@ -279,11 +457,16 @@ button.print-button:hover {
             accept=".xlsx,.xls"
         >
 
+
         <br>
 
-        <button onclick="generateLabels()">
+
+        <button
+            onclick="generateLabels()"
+        >
             Generate Labels
         </button>
+
 
         <button
             class="print-button"
@@ -292,59 +475,67 @@ button.print-button:hover {
             Print / Save PDF
         </button>
 
+
         <div id="status"></div>
+
 
     </div>
 
 </div>
 
 
-<!-- =========================
+
+<!-- =====================================================
      LABEL PREVIEW
-========================= -->
+===================================================== -->
 
 <div id="preview"></div>
+
 
 
 <script>
 
 
-/*
-=========================================================
-UTILITY
-=========================================================
-*/
-
+/* =====================================================
+   NORMALIZE HEADER
+===================================================== */
 
 function normalizeHeader(value) {
 
     return String(value || "")
+
         .trim()
+
         .toLowerCase()
+
         .replace(/[_\-]/g, " ")
+
         .replace(/\s+/g, " ");
 
 }
 
 
-/*
-=========================================================
-FIND COLUMN
-=========================================================
-*/
+
+/* =====================================================
+   FIND COLUMN
+===================================================== */
 
 function findColumn(headers, possibleNames) {
 
+
     for (const header of headers) {
+
 
         const normalizedHeader =
             normalizeHeader(header);
 
-        for (const possibleName of possibleNames) {
+
+        for (const name of possibleNames) {
+
 
             if (
                 normalizedHeader ===
-                normalizeHeader(possibleName)
+                normalizeHeader(name)
             ) {
 
                 return header;
@@ -355,52 +546,125 @@ function findColumn(headers, possibleNames) {
 
     }
 
+
     return null;
 
 }
 
 
-/*
-=========================================================
-ESCAPE HTML
-=========================================================
-*/
 
-function escapeHtml(value) {
+/* =====================================================
+   PALLET NUMBER FONT SIZE
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+   Automatically reduces size for long numbers.
+===================================================== */
+
+function adjustPalletFontSize(
+    element,
+    value
+) {
+
+
+    const text =
+        String(value);
+
+
+    const length =
+        text.length;
+
+
+    if (length <= 3) {
+
+        element.style.fontSize =
+            "280px";
+
+    }
+
+    else if (length === 4) {
+
+        element.style.fontSize =
+            "260px";
+
+    }
+
+    else if (length === 5) {
+
+        element.style.fontSize =
+            "235px";
+
+    }
+
+    else if (length === 6) {
+
+        element.style.fontSize =
+            "210px";
+
+    }
+
+    else if (length === 7) {
+
+        element.style.fontSize =
+            "185px";
+
+    }
+
+    else if (length === 8) {
+
+        element.style.fontSize =
+            "165px";
+
+    }
+
+    else if (length === 9) {
+
+        element.style.fontSize =
+            "145px";
+
+    }
+
+    else {
+
+        element.style.fontSize =
+            "125px";
+
+    }
 
 }
 
 
-/*
-=========================================================
-GENERATE LABELS
-=========================================================
-*/
+
+/* =====================================================
+   GENERATE LABELS
+===================================================== */
 
 async function generateLabels() {
 
+
     const fileInput =
-        document.getElementById("excelFile");
+        document.getElementById(
+            "excelFile"
+        );
+
 
     const status =
-        document.getElementById("status");
+        document.getElementById(
+            "status"
+        );
+
 
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
 
 
-    /*
-        Check file
-    */
+    /* =================================================
+       CHECK FILE
+    ================================================= */
 
-    if (!fileInput.files.length) {
+    if (
+        !fileInput.files.length
+    ) {
 
         alert(
             "Please select your Packing List Excel file."
@@ -419,48 +683,44 @@ async function generateLabels() {
         "Reading Excel file...";
 
 
-    preview.innerHTML = "";
+    preview.innerHTML =
+        "";
 
 
     try {
 
 
-        /*
-        =================================================
-        READ FILE
-        =================================================
-        */
+        /* =================================================
+           READ EXCEL
+        ================================================= */
 
         const arrayBuffer =
             await file.arrayBuffer();
 
-
-        /*
-            cellStyles:true helps preserve
-            Excel formatted values where possible.
-        */
 
         const workbook =
             XLSX.read(
                 arrayBuffer,
                 {
                     type: "array",
+
                     cellStyles: true
                 }
             );
 
 
-        /*
-        =================================================
-        FIRST SHEET
-        =================================================
-        */
+        /* =================================================
+           FIRST SHEET
+        ================================================= */
 
         const sheetName =
             workbook.SheetNames[0];
 
+
         const worksheet =
-            workbook.Sheets[sheetName];
+            workbook.Sheets[
+                sheetName
+            ];
 
 
         if (!worksheet) {
@@ -472,19 +732,16 @@ async function generateLabels() {
         }
 
 
-        /*
-        =================================================
-        READ AS ARRAY FIRST
-        =================================================
-
-        This allows us to identify the header row.
-        */
+        /* =================================================
+           READ AS ARRAY
+        ================================================= */
 
         const rawData =
             XLSX.utils.sheet_to_json(
                 worksheet,
                 {
                     header: 1,
+
                     defval: ""
                 }
             );
@@ -496,33 +753,39 @@ async function generateLabels() {
         ) {
 
             throw new Error(
-                "The Excel sheet appears to be empty."
+                "The Excel sheet is empty."
             );
 
         }
 
 
-        /*
-        =================================================
-        FIND HEADER ROW
-        =================================================
+        /* =================================================
+           FIND HEADER ROW
 
-        Looks for a row containing:
-        Item Code / Pallet / Qty
-        */
+           Search first 20 rows.
+        ================================================= */
 
-        let headerRowIndex = -1;
+        let headerRowIndex =
+            -1;
 
 
         for (
             let i = 0;
-            i < Math.min(rawData.length, 20);
+
+            i <
+            Math.min(
+                rawData.length,
+                20
+            );
+
             i++
         ) {
 
+
             const row =
-                rawData[i]
-                .map(normalizeHeader);
+                rawData[i].map(
+                    normalizeHeader
+                );
 
 
             const hasItem =
@@ -544,9 +807,9 @@ async function generateLabels() {
                         "palletnumber",
                         "pallet",
                         "pallet no",
+                        "pallet no.",
                         "pallet #",
-                        "pallet id",
-                        "pallet no."
+                        "pallet id"
                     ].includes(x)
                 );
 
@@ -567,7 +830,8 @@ async function generateLabels() {
                 hasQty
             ) {
 
-                headerRowIndex = i;
+                headerRowIndex =
+                    i;
 
                 break;
 
@@ -576,30 +840,34 @@ async function generateLabels() {
         }
 
 
-        /*
-        =================================================
-        IF HEADER NOT FOUND
-        =================================================
-        */
+        /* =================================================
+           HEADER NOT FOUND
+        ================================================= */
 
-        if (headerRowIndex === -1) {
+        if (
+            headerRowIndex === -1
+        ) {
 
             throw new Error(
-                "Could not find the Item Code, Pallet Number and Qty columns."
+                "Could not find Item Code, Pallet Number and Qty columns."
             );
 
         }
 
 
-        /*
-        =================================================
-        CONVERT DATA
-        =================================================
-        */
+        /* =================================================
+           GET HEADERS
+        ================================================= */
 
         const headers =
-            rawData[headerRowIndex];
+            rawData[
+                headerRowIndex
+            ];
 
+
+        /* =================================================
+           GET DATA ROWS
+        ================================================= */
 
         const dataRows =
             rawData.slice(
@@ -607,44 +875,56 @@ async function generateLabels() {
             );
 
 
-        /*
-        Create objects manually.
-        */
+        /* =================================================
+           CREATE ROW OBJECTS
+        ================================================= */
 
         const rows =
             dataRows
+
                 .filter(row =>
+
                     row.some(cell =>
-                        String(cell).trim() !== ""
+                        String(
+                            cell
+                        ).trim() !== ""
                     )
+
                 )
+
                 .map(row => {
+
 
                     const obj = {};
 
+
                     headers.forEach(
-                        (header, index) => {
+                        (
+                            header,
+                            index
+                        ) => {
 
                             obj[header] =
-                                row[index] ?? "";
+                                row[index] ??
+                                "";
 
                         }
                     );
+
 
                     return obj;
 
                 });
 
 
-        /*
-        =================================================
-        FIND REQUIRED COLUMNS
-        =================================================
-        */
+        /* =================================================
+           FIND COLUMNS
+        ================================================= */
 
         const itemColumn =
             findColumn(
                 headers,
+
                 [
                     "Item Code",
                     "ItemCode",
@@ -658,6 +938,7 @@ async function generateLabels() {
         const palletColumn =
             findColumn(
                 headers,
+
                 [
                     "Pallet Number",
                     "PalletNumber",
@@ -673,6 +954,7 @@ async function generateLabels() {
         const qtyColumn =
             findColumn(
                 headers,
+
                 [
                     "Qty",
                     "Quantity",
@@ -680,6 +962,10 @@ async function generateLabels() {
                 ]
             );
 
+
+        /* =================================================
+           VALIDATE
+        ================================================= */
 
         if (!itemColumn) {
 
@@ -708,11 +994,9 @@ async function generateLabels() {
         }
 
 
-        /*
-        =================================================
-        GENERATE LABELS
-        =================================================
-        */
+        /* =================================================
+           CREATE LABELS
+        ================================================= */
 
         let generated = 0;
 
@@ -722,25 +1006,28 @@ async function generateLabels() {
 
             const itemCode =
                 String(
-                    row[itemColumn] ?? ""
+                    row[itemColumn] ??
+                    ""
                 ).trim();
 
 
             const palletNumber =
                 String(
-                    row[palletColumn] ?? ""
+                    row[palletColumn] ??
+                    ""
                 ).trim();
 
 
             const qty =
                 String(
-                    row[qtyColumn] ?? ""
+                    row[qtyColumn] ??
+                    ""
                 ).trim();
 
 
-            /*
-                Ignore completely empty rows.
-            */
+            /* =============================================
+               SKIP EMPTY ROW
+            ============================================= */
 
             if (
                 !itemCode &&
@@ -753,51 +1040,74 @@ async function generateLabels() {
             }
 
 
-            /*
-            =================================================
-            LABEL
-            =================================================
-            */
+            /* =============================================
+               LABEL
+            ============================================= */
 
             const label =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            label.className = "label";
+
+            label.className =
+                "label";
 
 
-            /*
-            ITEM CODE
-            */
+            /* =============================================
+               ITEM CODE
+            ============================================= */
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "item-code";
+
 
             item.textContent =
                 itemCode;
 
 
-            /*
-            PALLET NUMBER
-            */
+            /* =============================================
+               PALLET AREA
+            ============================================= */
 
             const palletArea =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             palletArea.className =
                 "pallet-area";
 
 
+            /* =============================================
+               PALLET NUMBER
+            ============================================= */
+
             const pallet =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             pallet.className =
                 "pallet-number";
 
+
             pallet.textContent =
                 palletNumber;
+
+
+            adjustPalletFontSize(
+                pallet,
+                palletNumber
+            );
 
 
             palletArea.appendChild(
@@ -805,73 +1115,113 @@ async function generateLabels() {
             );
 
 
-            /*
-            BOTTOM INFO
-            */
+            /* =============================================
+               BOTTOM INFO
+            ============================================= */
 
             const bottom =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             bottom.className =
                 "bottom-info";
 
 
+            /* =============================================
+               LOT NUMBER
+            ============================================= */
+
             const lot =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             lot.className =
                 "lot-number";
 
-            lot.innerHTML =
-                `
-                <span>Lot Number:</span>
-                <span class="lot-line"></span>
-                `;
 
+            lot.innerHTML = `
+
+                <span>
+                    Lot Number:
+                </span>
+
+                <span
+                    class="lot-line"
+                ></span>
+
+            `;
+
+
+            /* =============================================
+               QTY
+            ============================================= */
 
             const quantity =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             quantity.className =
                 "qty";
 
+
             quantity.textContent =
-                "Qty: " + qty;
+                "Qty: " +
+                qty;
 
 
-            bottom.appendChild(lot);
+            /* =============================================
+               ASSEMBLE LABEL
+            ============================================= */
 
-            bottom.appendChild(quantity);
+            bottom.appendChild(
+                lot
+            );
 
 
-            /*
-            Assemble
-            */
+            bottom.appendChild(
+                quantity
+            );
 
-            label.appendChild(item);
+
+            label.appendChild(
+                item
+            );
+
 
             label.appendChild(
                 palletArea
             );
 
-            label.appendChild(bottom);
+
+            label.appendChild(
+                bottom
+            );
 
 
-            preview.appendChild(label);
+            preview.appendChild(
+                label
+            );
 
 
             generated++;
 
+
         });
 
 
-        /*
-        =================================================
-        RESULT
-        =================================================
-        */
+        /* =================================================
+           CHECK RESULT
+        ================================================= */
 
-        if (generated === 0) {
+        if (
+            generated === 0
+        ) {
 
             throw new Error(
                 "No pallet data was found."
@@ -880,14 +1230,18 @@ async function generateLabels() {
         }
 
 
+        /* =================================================
+           STATUS
+        ================================================= */
+
         status.textContent =
             generated +
             " pallet label(s) generated successfully.";
 
 
-        /*
-        Scroll to preview
-        */
+        /* =================================================
+           SCROLL TO PREVIEW
+        ================================================= */
 
         preview.scrollIntoView({
             behavior: "smooth"
@@ -895,11 +1249,19 @@ async function generateLabels() {
 
 
     }
+
+
     catch (error) {
 
-        console.error(error);
 
-        status.textContent = "";
+        console.error(
+            error
+        );
+
+
+        status.textContent =
+            "";
+
 
         alert(
             "Error:\n\n" +
@@ -911,16 +1273,18 @@ async function generateLabels() {
 }
 
 
-/*
-=========================================================
-PRINT
-=========================================================
-*/
+
+/* =====================================================
+   PRINT
+===================================================== */
 
 function printLabels() {
 
+
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
 
 
     if (
@@ -940,8 +1304,9 @@ function printLabels() {
 
 }
 
-
 </script>
 
+
 </body>
+
 </html>
