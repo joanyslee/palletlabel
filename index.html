@@ -4,10 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pallet ID Generator</title>
+<title>🎀 Pallet Label Maker 🎀</title>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -23,9 +22,23 @@
 
 body {
     margin: 0;
-    background: #eeeeee;
-    color: #111;
-    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff0f6,
+            #ffe4ef,
+            #fff5f9
+        );
+
+    color: #5a3343;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    min-height: 100vh;
 }
 
 
@@ -34,93 +47,190 @@ body {
 ===================================================== */
 
 .controls {
+
     width: 900px;
-    max-width: 95%;
-    margin: 30px auto;
-    padding: 30px;
 
-    background: white;
+    max-width: 94%;
 
-    border-radius: 12px;
+    margin: 35px auto;
+
+    padding: 35px;
+
+    background: rgba(255,255,255,0.92);
+
+    border: 2px solid #ffc5d9;
+
+    border-radius: 28px;
 
     box-shadow:
-        0 3px 15px rgba(0,0,0,0.15);
+        0 10px 35px
+        rgba(214, 87, 132, 0.15);
 }
+
+
+/* =====================================================
+   TITLE
+===================================================== */
 
 h1 {
+
     text-align: center;
 
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
 
-    font-size: 34px;
+    font-size: 38px;
+
+    font-weight: 900;
+
+    color: #d94f82;
+
+    letter-spacing: -1px;
 }
 
+
 .instructions {
+
     text-align: center;
 
-    color: #555;
+    color: #9c6478;
 
     font-size: 17px;
 
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 }
+
+
+/* =====================================================
+   FILE AREA
+===================================================== */
 
 .file-area {
+
     text-align: center;
 
-    padding: 25px;
+    padding: 30px;
 
-    border: 2px dashed #aaa;
+    background: #fff7fa;
 
-    border-radius: 10px;
+    border: 2px dashed #f3a9c3;
+
+    border-radius: 22px;
 }
 
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
 input[type="file"] {
+
     font-size: 16px;
 
     margin: 15px;
+
+    color: #7d4a5e;
 }
 
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
 button {
+
     border: none;
 
-    border-radius: 8px;
+    border-radius: 999px;
 
-    padding: 14px 28px;
+    padding:
+        15px
+        30px;
 
-    margin: 5px;
+    margin: 6px;
 
     font-size: 17px;
 
-    font-weight: bold;
+    font-weight: 800;
 
     cursor: pointer;
 
-    background: #2563eb;
-
     color: white;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
-button:hover {
-    background: #1d4ed8;
+
+/* Generate Button */
+
+button.generate-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f58caf,
+            #e96b96
+        );
+
+    box-shadow:
+        0 5px 14px
+        rgba(233,107,150,0.30);
 }
+
+
+/* Print Button */
 
 button.print-button {
-    background: #111827;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d98ab0,
+            #c66a97
+        );
+
+    box-shadow:
+        0 5px 14px
+        rgba(198,106,151,0.25);
 }
 
-button.print-button:hover {
-    background: #000;
+
+/* Hover */
+
+button:hover {
+
+    transform:
+        translateY(-2px)
+        scale(1.02);
 }
+
+
+/* Click */
+
+button:active {
+
+    transform:
+        translateY(1px)
+        scale(0.98);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 #status {
-    margin-top: 15px;
+
+    margin-top: 18px;
 
     text-align: center;
 
-    color: #555;
+    color: #a25c76;
 
     font-size: 16px;
+
+    font-weight: 600;
 }
 
 
@@ -138,15 +248,13 @@ button.print-button:hover {
 
     gap: 30px;
 
-    padding-bottom: 50px;
+    padding-bottom: 60px;
 }
 
 
 /* =====================================================
    LABEL
-
    LETTER LANDSCAPE
-   11 x 8.5 inch
 ===================================================== */
 
 .label {
@@ -163,17 +271,6 @@ button.print-button:hover {
 
     display: grid;
 
-    /*
-        TOP:
-        SAP / ITEM CODE
-
-        MIDDLE:
-        PALLET ID
-
-        BOTTOM:
-        LOT / QTY
-    */
-
     grid-template-rows:
         1.55in
         1fr
@@ -186,14 +283,13 @@ button.print-button:hover {
     break-after: page;
 
     box-shadow:
-        0 3px 18px rgba(0,0,0,0.20);
+        0 6px 25px
+        rgba(173,82,118,0.18);
 }
 
 
 /* =====================================================
    ITEM CODE / SAP CODE
-
-   Slightly smaller than previous version
 ===================================================== */
 
 .item-code {
@@ -210,7 +306,7 @@ button.print-button:hover {
 
     text-align: center;
 
-    font-size: 155px;
+    font-size: 150px;
 
     font-weight: 900;
 
@@ -223,6 +319,8 @@ button.print-button:hover {
     overflow: hidden;
 
     padding: 0;
+
+    color: #111;
 }
 
 
@@ -250,8 +348,7 @@ button.print-button:hover {
 
 /* =====================================================
    PALLET ID
-
-   BIGGEST TEXT
+   BIGGEST
 ===================================================== */
 
 .pallet-number {
@@ -269,6 +366,8 @@ button.print-button:hover {
     white-space: nowrap;
 
     overflow: hidden;
+
+    color: #111;
 }
 
 
@@ -293,6 +392,8 @@ button.print-button:hover {
     font-weight: 800;
 
     line-height: 1;
+
+    color: #111;
 }
 
 
@@ -378,7 +479,6 @@ button.print-button:hover {
 
         break-after: auto;
     }
-
 }
 
 
@@ -407,17 +507,21 @@ button.print-button:hover {
 
 <div class="controls">
 
+
     <h1>
-        Pallet ID Generator
+        🎀 Pallet Label Maker 🎀
     </h1>
 
 
     <div class="instructions">
-        Upload your Packing List Excel file
+
+        Upload your Packing List Excel file ✨
+
     </div>
 
 
     <div class="file-area">
+
 
         <input
             type="file"
@@ -430,9 +534,10 @@ button.print-button:hover {
 
 
         <button
+            class="generate-button"
             onclick="generateLabels()"
         >
-            Generate Labels
+            🌸 Generate Labels
         </button>
 
 
@@ -440,7 +545,7 @@ button.print-button:hover {
             class="print-button"
             onclick="printLabels()"
         >
-            Print / Save PDF
+            🖨️ Print / Save PDF
         </button>
 
 
@@ -533,11 +638,12 @@ function fitItemCode(element) {
 
 
     /*
-       Start slightly smaller than
-       the previous version.
+       Start at 150px.
+       This is slightly smaller
+       than the previous version.
     */
 
-    let fontSize = 165;
+    let fontSize = 150;
 
 
     element.style.fontSize =
@@ -545,7 +651,8 @@ function fitItemCode(element) {
 
 
     /*
-       Keep reducing only if necessary.
+       Reduce only if the
+       text doesn't fit.
     */
 
     while (
@@ -569,7 +676,6 @@ function fitItemCode(element) {
 
         element.style.fontSize =
             fontSize + "px";
-
     }
 
 }
@@ -594,7 +700,7 @@ function fitPalletNumber(element) {
 
 
     /*
-       Pallet ID starts HUGE.
+       Pallet ID stays the biggest.
     */
 
     let fontSize = 390;
@@ -603,10 +709,6 @@ function fitPalletNumber(element) {
     element.style.fontSize =
         fontSize + "px";
 
-
-    /*
-       Reduce only when needed.
-    */
 
     while (
 
@@ -629,7 +731,6 @@ function fitPalletNumber(element) {
 
         element.style.fontSize =
             fontSize + "px";
-
     }
 
 }
@@ -659,9 +760,9 @@ async function generateLabels() {
         );
 
 
-    /* =================================================
+    /* =============================================
        CHECK FILE
-    ================================================= */
+    ============================================= */
 
     if (
         !fileInput.files.length
@@ -680,7 +781,7 @@ async function generateLabels() {
 
 
     status.textContent =
-        "Reading Excel file...";
+        "Reading Excel file... 💕";
 
 
     preview.innerHTML = "";
@@ -727,7 +828,6 @@ async function generateLabels() {
             throw new Error(
                 "No worksheet found."
             );
-
         }
 
 
@@ -754,7 +854,6 @@ async function generateLabels() {
             throw new Error(
                 "The Excel sheet is empty."
             );
-
         }
 
 
@@ -783,9 +882,7 @@ async function generateLabels() {
                 );
 
 
-            /* =========================================
-               SAP
-            ========================================= */
+            /* SAP */
 
             const hasSAP =
                 row.some(x =>
@@ -799,9 +896,7 @@ async function generateLabels() {
                 );
 
 
-            /* =========================================
-               PALLET ID
-            ========================================= */
+            /* PALLET ID */
 
             const hasPallet =
                 row.some(x =>
@@ -816,9 +911,7 @@ async function generateLabels() {
                 );
 
 
-            /* =========================================
-               QUANTITY
-            ========================================= */
+            /* QTY */
 
             const hasQty =
                 row.some(x =>
@@ -840,7 +933,6 @@ async function generateLabels() {
                     i;
 
                 break;
-
             }
 
         }
@@ -857,7 +949,6 @@ async function generateLabels() {
             throw new Error(
                 "Could not find SAP / SAP Code, Pallet ID and Qty columns."
             );
-
         }
 
 
@@ -910,7 +1001,6 @@ async function generateLabels() {
                             obj[header] =
                                 row[index] ??
                                 "";
-
                         }
                     );
 
@@ -966,7 +1056,7 @@ async function generateLabels() {
 
 
         /* =============================================
-           VALIDATE COLUMNS
+           VALIDATE
         ============================================= */
 
         if (!sapColumn) {
@@ -974,7 +1064,6 @@ async function generateLabels() {
             throw new Error(
                 "SAP / SAP Code column not found."
             );
-
         }
 
 
@@ -983,7 +1072,6 @@ async function generateLabels() {
             throw new Error(
                 "Pallet ID column not found."
             );
-
         }
 
 
@@ -992,7 +1080,6 @@ async function generateLabels() {
             throw new Error(
                 "Qty / Quantity column not found."
             );
-
         }
 
 
@@ -1007,7 +1094,7 @@ async function generateLabels() {
 
 
             /* =========================================
-               GET VALUES
+               VALUES
             ========================================= */
 
             const sapCode =
@@ -1042,7 +1129,6 @@ async function generateLabels() {
             ) {
 
                 return;
-
             }
 
 
@@ -1080,7 +1166,6 @@ async function generateLabels() {
 
             /* =========================================
                PALLET ID
-               
                ADD #
             ========================================= */
 
@@ -1127,9 +1212,7 @@ async function generateLabels() {
                 "bottom-info";
 
 
-            /* =========================================
-               LOT NUMBER
-            ========================================= */
+            /* LOT NUMBER */
 
             const lot =
                 document.createElement(
@@ -1145,9 +1228,7 @@ async function generateLabels() {
                 "Lot Number:";
 
 
-            /* =========================================
-               QTY
-            ========================================= */
+            /* QTY */
 
             const quantity =
                 document.createElement(
@@ -1213,12 +1294,11 @@ async function generateLabels() {
             throw new Error(
                 "No pallet data was found."
             );
-
         }
 
 
         /* =============================================
-           WAIT FOR BROWSER RENDER
+           FIT TEXT
         ============================================= */
 
         requestAnimationFrame(() => {
@@ -1262,11 +1342,11 @@ async function generateLabels() {
 
         status.textContent =
             generated +
-            " pallet label(s) generated successfully.";
+            " pallet label(s) generated successfully! 🎀";
 
 
         /* =============================================
-           SCROLL
+           SCROLL TO LABELS
         ============================================= */
 
         preview.scrollIntoView({
@@ -1319,7 +1399,6 @@ function printLabels() {
         );
 
         return;
-
     }
 
 
