@@ -3,242 +3,352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pallet Label Generator</title>
 
-<!-- Excel reader -->
+<title>Pallet ID Generator</title>
+
+<!-- SheetJS: Excel (.xlsx) reader -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #eeeeee;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111;
+}
+
+/* =========================
+   CONTROL PANEL
+========================= */
+
+.controls {
+    width: 900px;
+    max-width: 95%;
+    margin: 30px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.12);
+}
+
+h1 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.instructions {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.file-area {
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+}
+
+input[type="file"] {
+    margin: 15px;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 12px 25px;
+    margin: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button.print-button {
+    background: #111827;
+}
+
+button.print-button:hover {
+    background: #000;
+}
+
+#status {
+    margin-top: 15px;
+    text-align: center;
+    color: #555;
+}
+
+/* =========================
+   LABEL AREA
+========================= */
+
+#preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+/*
+    Letter Landscape
+
+    11in x 8.5in
+*/
+
+.label {
+    width: 11in;
+    height: 8.5in;
+
+    background: white;
+
+    padding: 0.45in 0.55in;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    page-break-after: always;
+
+    box-shadow: 0 2px 15px rgba(0,0,0,.2);
+}
+
+/* =========================
+   ITEM CODE
+========================= */
+
+.item-code {
+    text-align: center;
+
+    font-size: 48px;
+    font-weight: bold;
+
+    margin-top: 0.15in;
+
+    word-break: break-word;
+}
+
+/* =========================
+   PALLET NUMBER
+========================= */
+
+.pallet-area {
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.pallet-number {
+    font-size: 150px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    word-break: break-word;
+
+    max-width: 100%;
+}
+
+/* =========================
+   BOTTOM INFO
+========================= */
+
+.bottom-info {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    font-size: 32px;
+
+    margin-bottom: 0.15in;
+}
+
+.lot-number {
+    display: flex;
+    align-items: flex-end;
+}
+
+.lot-line {
+    display: inline-block;
+
+    width: 3.5in;
+
+    border-bottom: 2px solid #111;
+
+    margin-left: 10px;
+
+    height: 35px;
+}
+
+.qty {
+    font-weight: bold;
+}
+
+
+/* =========================
+   PRINT
+========================= */
+
+@media print {
 
     body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f3f4f6;
-        color: #111827;
-    }
-
-    .container {
-        max-width: 1100px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .upload-box {
         background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 2px 10px rgba(0,0,0,.08);
-        margin-bottom: 25px;
-        text-align: center;
+        margin: 0;
     }
 
-    input[type="file"] {
-        margin: 15px 0;
-    }
-
-    button {
-        border: none;
-        background: #2563eb;
-        color: white;
-        padding: 12px 22px;
-        border-radius: 7px;
-        font-size: 16px;
-        cursor: pointer;
-        margin: 5px;
-    }
-
-    button:hover {
-        background: #1d4ed8;
-    }
-
-    button.secondary {
-        background: #374151;
-    }
-
-    button.secondary:hover {
-        background: #1f2937;
-    }
-
-    #status {
-        margin-top: 10px;
-        color: #4b5563;
+    .controls {
+        display: none !important;
     }
 
     #preview {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
-
-    /* Letter paper */
-    .label {
-        width: 8.5in;
-        height: 11in;
-        background: white;
-        padding: 0.55in;
-        position: relative;
-        page-break-after: always;
-        box-shadow: 0 2px 12px rgba(0,0,0,.15);
-
-        display: flex;
-        flex-direction: column;
-    }
-
-    .item-code {
-        text-align: center;
-        font-size: 42px;
-        font-weight: bold;
-        word-break: break-word;
-        margin-top: 0.25in;
-    }
-
-    .pallet-section {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .pallet-number {
-        font-size: 110px;
-        font-weight: bold;
-        line-height: 1;
-        text-align: center;
-        word-break: break-word;
-    }
-
-    .pallet-title {
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: 20px;
-        letter-spacing: 2px;
-    }
-
-    .bottom-info {
-        font-size: 30px;
-        line-height: 1.8;
-        margin-bottom: 0.25in;
-    }
-
-    .lot-line {
-        border-bottom: 2px solid #111;
-        display: inline-block;
-        width: 5in;
-        height: 35px;
-        vertical-align: bottom;
-    }
-
-    .qty {
-        font-weight: bold;
-    }
-
-    .hidden {
-        display: none;
-    }
-
-    @media print {
-        body {
-            background: white;
-        }
-
-        .container > *:not(#preview) {
-            display: none !important;
-        }
-
-        #preview {
-            display: block;
-        }
-
-        .label {
-            box-shadow: none;
-            margin: 0;
-        }
-    }
-
-    @page {
-        size: Letter;
+        display: block;
+        padding: 0;
         margin: 0;
     }
+
+    .label {
+        width: 11in;
+        height: 8.5in;
+
+        margin: 0;
+        padding: 0.45in 0.55in;
+
+        box-shadow: none;
+
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .label:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+}
+
+
+/*
+    Tell browser to use Letter Landscape.
+*/
+
+@page {
+    size: Letter landscape;
+    margin: 0;
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="container">
 
-    <div id="controls">
+<!-- =========================
+     CONTROLS
+========================= -->
 
-        <h1>Pallet Label Generator</h1>
+<div class="controls">
 
-        <div class="upload-box">
+    <h1>Pallet ID Generator</h1>
 
-            <h2>Upload Packing List</h2>
-
-            <p>
-                Upload your Excel (.xlsx) packing list.
-            </p>
-
-            <input
-                type="file"
-                id="excelFile"
-                accept=".xlsx,.xls"
-            >
-
-            <br>
-
-            <button onclick="generateLabels()">
-                Generate Labels
-            </button>
-
-            <button
-                class="secondary"
-                onclick="window.print()"
-            >
-                Print / Save PDF
-            </button>
-
-            <div id="status"></div>
-
-        </div>
-
+    <div class="instructions">
+        Upload your Packing List Excel file.
     </div>
 
-    <div id="preview"></div>
+    <div class="file-area">
+
+        <input
+            type="file"
+            id="excelFile"
+            accept=".xlsx,.xls"
+        >
+
+        <br>
+
+        <button onclick="generateLabels()">
+            Generate Labels
+        </button>
+
+        <button
+            class="print-button"
+            onclick="printLabels()"
+        >
+            Print / Save PDF
+        </button>
+
+        <div id="status"></div>
+
+    </div>
 
 </div>
 
 
+<!-- =========================
+     LABEL PREVIEW
+========================= -->
+
+<div id="preview"></div>
+
+
 <script>
 
+
+/*
+=========================================================
+UTILITY
+=========================================================
+*/
+
+
 function normalizeHeader(value) {
+
     return String(value || "")
         .trim()
         .toLowerCase()
-        .replace(/[_-]/g, " ")
+        .replace(/[_\-]/g, " ")
         .replace(/\s+/g, " ");
+
 }
 
+
+/*
+=========================================================
+FIND COLUMN
+=========================================================
+*/
 
 function findColumn(headers, possibleNames) {
 
     for (const header of headers) {
 
-        const normalized = normalizeHeader(header);
+        const normalizedHeader =
+            normalizeHeader(header);
 
-        for (const name of possibleNames) {
+        for (const possibleName of possibleNames) {
 
-            if (normalized === normalizeHeader(name)) {
+            if (
+                normalizedHeader ===
+                normalizeHeader(possibleName)
+            ) {
+
                 return header;
+
             }
 
         }
@@ -246,200 +356,543 @@ function findColumn(headers, possibleNames) {
     }
 
     return null;
+
 }
 
 
+/*
+=========================================================
+ESCAPE HTML
+=========================================================
+*/
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/*
+=========================================================
+GENERATE LABELS
+=========================================================
+*/
+
 async function generateLabels() {
 
-    const fileInput = document.getElementById("excelFile");
-    const status = document.getElementById("status");
-    const preview = document.getElementById("preview");
+    const fileInput =
+        document.getElementById("excelFile");
+
+    const status =
+        document.getElementById("status");
+
+    const preview =
+        document.getElementById("preview");
+
+
+    /*
+        Check file
+    */
 
     if (!fileInput.files.length) {
-        alert("Please select an Excel file first.");
+
+        alert(
+            "Please select your Packing List Excel file."
+        );
+
         return;
+
     }
 
-    const file = fileInput.files[0];
 
-    status.textContent = "Reading Excel file...";
+    const file =
+        fileInput.files[0];
+
+
+    status.textContent =
+        "Reading Excel file...";
+
+
     preview.innerHTML = "";
+
 
     try {
 
-        const data = await file.arrayBuffer();
-
-        const workbook = XLSX.read(data, {
-            type: "array"
-        });
 
         /*
-         * Use the first worksheet.
-         */
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
+        =================================================
+        READ FILE
+        =================================================
+        */
 
-        const rows = XLSX.utils.sheet_to_json(
-            worksheet,
-            {
-                defval: ""
-            }
-        );
+        const arrayBuffer =
+            await file.arrayBuffer();
 
-        if (!rows.length) {
-            throw new Error("No data found in the Excel sheet.");
+
+        /*
+            cellStyles:true helps preserve
+            Excel formatted values where possible.
+        */
+
+        const workbook =
+            XLSX.read(
+                arrayBuffer,
+                {
+                    type: "array",
+                    cellStyles: true
+                }
+            );
+
+
+        /*
+        =================================================
+        FIRST SHEET
+        =================================================
+        */
+
+        const sheetName =
+            workbook.SheetNames[0];
+
+        const worksheet =
+            workbook.Sheets[sheetName];
+
+
+        if (!worksheet) {
+
+            throw new Error(
+                "No worksheet found."
+            );
+
         }
 
 
-        const headers = Object.keys(rows[0]);
+        /*
+        =================================================
+        READ AS ARRAY FIRST
+        =================================================
+
+        This allows us to identify the header row.
+        */
+
+        const rawData =
+            XLSX.utils.sheet_to_json(
+                worksheet,
+                {
+                    header: 1,
+                    defval: ""
+                }
+            );
+
+
+        if (
+            !rawData ||
+            rawData.length === 0
+        ) {
+
+            throw new Error(
+                "The Excel sheet appears to be empty."
+            );
+
+        }
 
 
         /*
-         * These are the column names the program will recognize.
-         *
-         * You can add more names here later if your real
-         * packing list uses different column names.
-         */
+        =================================================
+        FIND HEADER ROW
+        =================================================
 
-        const itemColumn = findColumn(headers, [
-            "Item Code",
-            "ItemCode",
-            "Item",
-            "SKU",
-            "Product Code"
-        ]);
+        Looks for a row containing:
+        Item Code / Pallet / Qty
+        */
 
-        const palletColumn = findColumn(headers, [
-            "Pallet Number",
-            "PalletNumber",
-            "Pallet",
-            "Pallet No",
-            "Pallet #",
-            "Pallet ID"
-        ]);
+        let headerRowIndex = -1;
 
-        const qtyColumn = findColumn(headers, [
-            "Qty",
-            "Quantity",
-            "QTY."
-        ]);
+
+        for (
+            let i = 0;
+            i < Math.min(rawData.length, 20);
+            i++
+        ) {
+
+            const row =
+                rawData[i]
+                .map(normalizeHeader);
+
+
+            const hasItem =
+                row.some(x =>
+                    [
+                        "item code",
+                        "itemcode",
+                        "item",
+                        "sku",
+                        "product code"
+                    ].includes(x)
+                );
+
+
+            const hasPallet =
+                row.some(x =>
+                    [
+                        "pallet number",
+                        "palletnumber",
+                        "pallet",
+                        "pallet no",
+                        "pallet #",
+                        "pallet id",
+                        "pallet no."
+                    ].includes(x)
+                );
+
+
+            const hasQty =
+                row.some(x =>
+                    [
+                        "qty",
+                        "quantity",
+                        "qty."
+                    ].includes(x)
+                );
+
+
+            if (
+                hasItem &&
+                hasPallet &&
+                hasQty
+            ) {
+
+                headerRowIndex = i;
+
+                break;
+
+            }
+
+        }
+
+
+        /*
+        =================================================
+        IF HEADER NOT FOUND
+        =================================================
+        */
+
+        if (headerRowIndex === -1) {
+
+            throw new Error(
+                "Could not find the Item Code, Pallet Number and Qty columns."
+            );
+
+        }
+
+
+        /*
+        =================================================
+        CONVERT DATA
+        =================================================
+        */
+
+        const headers =
+            rawData[headerRowIndex];
+
+
+        const dataRows =
+            rawData.slice(
+                headerRowIndex + 1
+            );
+
+
+        /*
+        Create objects manually.
+        */
+
+        const rows =
+            dataRows
+                .filter(row =>
+                    row.some(cell =>
+                        String(cell).trim() !== ""
+                    )
+                )
+                .map(row => {
+
+                    const obj = {};
+
+                    headers.forEach(
+                        (header, index) => {
+
+                            obj[header] =
+                                row[index] ?? "";
+
+                        }
+                    );
+
+                    return obj;
+
+                });
+
+
+        /*
+        =================================================
+        FIND REQUIRED COLUMNS
+        =================================================
+        */
+
+        const itemColumn =
+            findColumn(
+                headers,
+                [
+                    "Item Code",
+                    "ItemCode",
+                    "Item",
+                    "SKU",
+                    "Product Code"
+                ]
+            );
+
+
+        const palletColumn =
+            findColumn(
+                headers,
+                [
+                    "Pallet Number",
+                    "PalletNumber",
+                    "Pallet",
+                    "Pallet No",
+                    "Pallet No.",
+                    "Pallet #",
+                    "Pallet ID"
+                ]
+            );
+
+
+        const qtyColumn =
+            findColumn(
+                headers,
+                [
+                    "Qty",
+                    "Quantity",
+                    "QTY."
+                ]
+            );
 
 
         if (!itemColumn) {
+
             throw new Error(
-                "Could not find Item Code column."
+                "Item Code column not found."
             );
+
         }
+
 
         if (!palletColumn) {
+
             throw new Error(
-                "Could not find Pallet Number column."
+                "Pallet Number column not found."
             );
+
         }
+
 
         if (!qtyColumn) {
+
             throw new Error(
-                "Could not find Quantity / Qty column."
+                "Qty / Quantity column not found."
             );
+
         }
 
+
+        /*
+        =================================================
+        GENERATE LABELS
+        =================================================
+        */
 
         let generated = 0;
 
 
-        rows.forEach((row) => {
+        rows.forEach(row => {
 
-            const itemCode = String(
-                row[itemColumn] ?? ""
-            ).trim();
 
-            const palletNumber = String(
-                row[palletColumn] ?? ""
-            ).trim();
+            const itemCode =
+                String(
+                    row[itemColumn] ?? ""
+                ).trim();
 
-            const qty = String(
-                row[qtyColumn] ?? ""
-            ).trim();
+
+            const palletNumber =
+                String(
+                    row[palletColumn] ?? ""
+                ).trim();
+
+
+            const qty =
+                String(
+                    row[qtyColumn] ?? ""
+                ).trim();
 
 
             /*
-             * Skip completely empty rows.
-             */
-            if (!itemCode && !palletNumber && !qty) {
+                Ignore completely empty rows.
+            */
+
+            if (
+                !itemCode &&
+                !palletNumber &&
+                !qty
+            ) {
+
                 return;
+
             }
 
 
-            const label = document.createElement("div");
+            /*
+            =================================================
+            LABEL
+            =================================================
+            */
+
+            const label =
+                document.createElement("div");
 
             label.className = "label";
 
 
             /*
-             * ITEM CODE
-             */
-            const item = document.createElement("div");
+            ITEM CODE
+            */
 
-            item.className = "item-code";
-            item.textContent = itemCode;
+            const item =
+                document.createElement("div");
 
+            item.className =
+                "item-code";
 
-            /*
-             * PALLET NUMBER
-             */
-            const palletSection = document.createElement("div");
-
-            palletSection.className = "pallet-section";
-
-
-            const pallet = document.createElement("div");
-
-            pallet.className = "pallet-number";
-            pallet.textContent = palletNumber;
-
-
-            const title = document.createElement("div");
-
-            title.className = "pallet-title";
-            title.textContent = "PALLET NUMBER";
-
-
-            palletSection.appendChild(pallet);
-            palletSection.appendChild(title);
+            item.textContent =
+                itemCode;
 
 
             /*
-             * BOTTOM INFO
-             */
-            const bottom = document.createElement("div");
+            PALLET NUMBER
+            */
 
-            bottom.className = "bottom-info";
+            const palletArea =
+                document.createElement("div");
 
-            bottom.innerHTML = `
-                <div>
-                    Lot Number:
-                    <span class="lot-line"></span>
-                </div>
+            palletArea.className =
+                "pallet-area";
 
-                <div class="qty">
-                    Qty: ${escapeHtml(qty)}
-                </div>
-            `;
 
+            const pallet =
+                document.createElement("div");
+
+            pallet.className =
+                "pallet-number";
+
+            pallet.textContent =
+                palletNumber;
+
+
+            palletArea.appendChild(
+                pallet
+            );
+
+
+            /*
+            BOTTOM INFO
+            */
+
+            const bottom =
+                document.createElement("div");
+
+            bottom.className =
+                "bottom-info";
+
+
+            const lot =
+                document.createElement("div");
+
+            lot.className =
+                "lot-number";
+
+            lot.innerHTML =
+                `
+                <span>Lot Number:</span>
+                <span class="lot-line"></span>
+                `;
+
+
+            const quantity =
+                document.createElement("div");
+
+            quantity.className =
+                "qty";
+
+            quantity.textContent =
+                "Qty: " + qty;
+
+
+            bottom.appendChild(lot);
+
+            bottom.appendChild(quantity);
+
+
+            /*
+            Assemble
+            */
 
             label.appendChild(item);
-            label.appendChild(palletSection);
+
+            label.appendChild(
+                palletArea
+            );
+
             label.appendChild(bottom);
 
+
             preview.appendChild(label);
+
 
             generated++;
 
         });
 
 
+        /*
+        =================================================
+        RESULT
+        =================================================
+        */
+
+        if (generated === 0) {
+
+            throw new Error(
+                "No pallet data was found."
+            );
+
+        }
+
+
         status.textContent =
-            `${generated} pallet label(s) generated.`;
+            generated +
+            " pallet label(s) generated successfully.";
+
+
+        /*
+        Scroll to preview
+        */
+
+        preview.scrollIntoView({
+            behavior: "smooth"
+        });
+
 
     }
     catch (error) {
@@ -449,7 +902,8 @@ async function generateLabels() {
         status.textContent = "";
 
         alert(
-            "Error: " + error.message
+            "Error:\n\n" +
+            error.message
         );
 
     }
@@ -458,18 +912,34 @@ async function generateLabels() {
 
 
 /*
- * Prevent Excel cell contents from being interpreted
- * as HTML.
- */
-function escapeHtml(value) {
+=========================================================
+PRINT
+=========================================================
+*/
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function printLabels() {
+
+    const preview =
+        document.getElementById("preview");
+
+
+    if (
+        !preview.children.length
+    ) {
+
+        alert(
+            "Please generate labels first."
+        );
+
+        return;
+
+    }
+
+
+    window.print();
+
 }
+
 
 </script>
 
